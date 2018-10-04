@@ -54,7 +54,13 @@ module.exports = (app) => {
     })
     
     .delete((req, res) => {
-      //if successful response will be 'complete delete successful'
+      Book.deleteMany()
+        .then(() => res.status(200).send('complete delete successful'))
+        .catch((err) => {
+          console.log(`api.js > delete Book.deleteMany: ${err}`);
+          return handleError(res, err);
+        }); 
+
     });
 
 
