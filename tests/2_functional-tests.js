@@ -18,6 +18,9 @@ const suite = mocha.suite;
 chai.use(chaiHttp);
 
 suite('Functional Tests', function() {
+  
+  let _id1;
+  let _id2;
 
   /*
   * ----[EXAMPLE TEST]----
@@ -45,7 +48,18 @@ suite('Functional Tests', function() {
     suite('POST /api/books with title => create book object/expect book object', function() {
       
       test('Test POST /api/books with title', function(done) {
-        //done();
+       chai.request(server)
+        .post('/api/books')
+        .send({
+          title: 'Title'
+        })
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body[0], 'title', 'Book should contain title');
+          assert.property(res.body[0], '_id', 'Book should contain _id');
+          _id1 = res.body._id;
+          done();
+        });
       });
       
       test('Test POST /api/books with no title given', function(done) {

@@ -34,15 +34,22 @@ module.exports = (app) => {
           console.log(`api.js > get Book.find: ${err}`);
           return handleError(res, err);
         }); 
-      //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
     
-    .post(function (req, res){
-      var title = req.body.title;
-      //response will contain new book object including atleast _id and title
+    .post((req, res) => {
+      const title = req.body.title;
+      const book = new Book({ title, comments: [] });
+      Book.save()
+        .then((book) => {
+          res.status(200).json({ title: book.title, _id: book._id });
+        })
+        .catch((err) => {
+          console.log(`api.js > post Book.save: ${err}`);
+          return handleError(res, err);
+        }); 
     })
     
-    .delete(function(req, res){
+    .delete((req, res) => {
       //if successful response will be 'complete delete successful'
     });
 
