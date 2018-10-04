@@ -110,21 +110,58 @@ suite('Functional Tests', function() {
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){
-        done();
-      });
+        chai.request(server)
+          .get(`/api/books/${_id1}`)
+          .end(function(err, res){
+            assert.equal(res.status, 200);
+            assert.property(res.body, 'title', 'Book should contain title');
+            assert.property(res.body, '_id', 'Book should contain _id');
+            assert.equal(res.body.title, 'Title 1');
+            done();
+          });
       
     });
+      
+     });
 
 
     suite('POST /api/books/[id] => add comment/expect book object with id', function(){
       
       test('Test POST /api/books/[id] with comment', function(done){
-        done();
+       chai.request(server)
+        .post(`/api/books/${_id1}`)
+        .send({
+          comment: 'Test comment'
+        })
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.property(res.body, 'title', 'Book should contain title');
+          assert.property(res.body, '_id', 'Book should contain _id');
+          assert.property(res.body, 'comments', 'Book should contain comments');
+          assert.isArray(res.body.comments, 'comments should be an array');
+          assert.equal(res.body.title, 'Title 1');
+          assert.isAtLeast(res.body.comments.length, 1, 'comments array should contain at least one comment');
+          assert.equal(res.body.comments[res.body.comments.length - 1], 'Test comment');
+          done();
+        });
       });
       
     });
     
     suite('DELETE /api/books => delete all books', function() {
+      
+      test('Test DELETE /api/books', function(done) {
+        chai.request(server)
+        .delete('/api/books')
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'complete delete successful');
+          done();
+        });  
+      });
+    });
+    
+        suite('DELETE /api/books => delete all books', function() {
       
       test('Test DELETE /api/books', function(done) {
         chai.request(server)
