@@ -55,10 +55,10 @@ suite('Functional Tests', function() {
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.property(res.body[0], 'title', 'Book should contain title');
-          assert.property(res.body[0], '_id', 'Book should contain _id');
+          assert.property(res.body, 'title', 'Book should contain title');
+          assert.property(res.body, '_id', 'Book should contain _id');
           _id1 = res.body._id;
-          assert.equal(res.body[0].title, 'Title 1');
+          assert.equal(res.body.title, 'Title 1');
           done();
         });
       });

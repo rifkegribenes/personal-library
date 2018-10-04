@@ -45,8 +45,7 @@ module.exports = (app) => {
       const newBook = new Book({ title });
       newBook.save()
         .then((book) => {
-          if (!book) { console.log('error saving book'); }
-          res.status(200).json({ title: book.title, _id: book._id });
+          res.status(200).json(book);
         })
         .catch((err) => {
           console.log(`api.js > post Book.save: ${err}`);
