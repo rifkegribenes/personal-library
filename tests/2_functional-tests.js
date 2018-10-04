@@ -10,6 +10,7 @@ var chaiHttp = require('chai-http');
 var chai = require('chai');
 var assert = chai.assert;
 var mocha = require('mocha');
+var mongoose = require('mongoose');
 var server = require('../server');
 
 const test = mocha.test;
@@ -21,6 +22,7 @@ suite('Functional Tests', function() {
   
   let _id1;
   let _id2;
+  let _fakeId = mongoose.Types.ObjectId(12345);
 
   /*
   * ----[EXAMPLE TEST]----
@@ -98,7 +100,13 @@ suite('Functional Tests', function() {
     suite('GET /api/books/[id] => book object with [id]', function(){
       
       test('Test GET /api/books/[id] with id not in db',  function(done){
-        done();
+        chai.request(server)
+          .get(`/api/books/${_fakeId}`)
+          .end(function(err, res){
+            assert.equal(res.status, 200);
+            assert.equal(res.text, 'no book exists');
+            done();
+          });
       });
       
       test('Test GET /api/books/[id] with valid id in db',  function(done){

@@ -82,7 +82,7 @@ module.exports = (app) => {
         }); 
     })
     
-    .post(function(req, res){
+    .post((req, res) => {
       const bookid = req.params.id;
       const comment = req.body.comment;
       Book.findOne({ _id: bookid })
@@ -107,7 +107,7 @@ module.exports = (app) => {
         });
     })
     
-    .delete(function(req, res){
+    .delete((req, res) => {
       const bookid = req.params.id;
         Book.deleteOne({ _id: bookid })
           .then(() => res.status(200).send('delete successful'))
