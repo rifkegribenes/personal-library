@@ -92,8 +92,13 @@ module.exports = (app) => {
           } else {
             book.comments.push(comment);
             book.save()
-              .then(updatedBook)
-            return res.status(200).json(book);
+              .then((updatedBook) => {
+                return res.status(200).json(updatedBook);
+              })
+              .catch((err) => {
+                console.log(`api.js > post Book.save: ${err}`);
+                return handleError(res, err);
+              });
           }
         })
         .catch((err) => {
@@ -103,8 +108,13 @@ module.exports = (app) => {
     })
     
     .delete(function(req, res){
-      var bookid = req.params.id;
-      //if successful response will be 'delete successful'
+      const bookid = req.params.id;
+        Book.deleteOne({ _id: bookid })
+          .then(() => res.status(200).send('delete successful'))
+          .catch((err) => {
+            console.log(`api.js > delete Book.deleteOne: ${err}`);
+            return handleError(res, err);
+          }); 
     });
   
 };
