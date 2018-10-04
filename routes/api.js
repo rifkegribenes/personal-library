@@ -66,15 +66,40 @@ module.exports = (app) => {
 
 
   app.route('/api/books/:id')
-    .get(function (req, res){
-      var bookid = req.params.id;
-      //json res format: {"_id": bookid, "title": book_title, "comments": [comment,comment,...]}
+    .get((req, res) => {
+      const bookid = req.params.id;
+      Book.findOne({ _id: bookid })
+        .then((book) => {
+          if (!book) { 
+            return res.status(200).send('no book exists'); 
+          } else {
+            return res.status(200).json(book);
+          }
+        })
+        .catch((err) => {
+          console.log(`api.js > get Book.findOne: ${err}`);
+          return handleError(res, err);
+        }); 
     })
     
     .post(function(req, res){
-      var bookid = req.params.id;
-      var comment = req.body.comment;
-      //json res format same as .get
+      const bookid = req.params.id;
+      const comment = req.body.comment;
+      Book.findOne({ _id: bookid })
+        .then((book) => {
+          if (!book) { 
+            return res.status(200).send('no book exists'); 
+          } else {
+            book.comments.push(comment);
+            book.save()
+              .then(updatedBook)
+            return res.status(200).json(book);
+          }
+        })
+        .catch((err) => {
+          console.log(`api.js > get Book.findOne: ${err}`);
+          return handleError(res, err);
+        });
     })
     
     .delete(function(req, res){
