@@ -9,16 +9,29 @@
 'use strict';
 
 var expect = require('chai').expect;
-var MongoClient = require('mongodb').MongoClient;
-var ObjectId = require('mongodb').ObjectId;
-const MONGODB_CONNECTION_STRING = process.env.DB;
-//Example connection: MongoClient.connect(MONGODB_CONNECTION_STRING, function(err, db) {});
+const Book = require('../models/book');
 
-module.exports = function (app) {
+module.exports = (app) => {
+  
+  const handleError = (res, err) => {
+    return res.status(500).json({message: err});
+  }
 
   app.route('/api/books')
-    .get(function (req, res){
-      //response will be array of book objects
+    .get((req, res) => {
+      Book.find()
+        .then((bookDocs) => {
+          const books = bookDocs.map((book) => {
+            _id: book._id,
+            title: book.title,
+            commentcount: book.comments.length 
+          });
+          res.status(200).json(books);
+      })
+        .catch((err) => {
+          console.log(`api.js > get Book.find: ${err}`);
+          return handleError(res, err);
+        }); 
       //json res format: [{"_id": bookid, "title": book_title, "commentcount": num_of_comments },...]
     })
     

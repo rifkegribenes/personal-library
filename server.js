@@ -21,6 +21,12 @@ app.use(cors({origin: '*'})); //USED FOR FCC TESTING PURPOSES ONLY!
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// connect to db
+const mongoose = require('mongoose');
+const configDB = require('./config/database.js');
+mongoose.connect(configDB.url, configDB.options);
+mongoose.Promise = global.Promise;
+
 //Index page (static HTML)
 app.route('/')
   .get(function (req, res) {
