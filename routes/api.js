@@ -38,6 +38,9 @@ module.exports = (app) => {
     
     .post((req, res) => {
       const title = req.body.title;
+      if (!title) { 
+        return res.status(200).send('missing inputs');
+      };
       const book = new Book({ title, comments: [] });
       Book.save()
         .then((book) => {

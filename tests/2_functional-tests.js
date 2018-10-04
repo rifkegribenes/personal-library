@@ -51,19 +51,27 @@ suite('Functional Tests', function() {
        chai.request(server)
         .post('/api/books')
         .send({
-          title: 'Title'
+          title: 'Title 1'
         })
         .end(function(err, res){
           assert.equal(res.status, 200);
           assert.property(res.body[0], 'title', 'Book should contain title');
           assert.property(res.body[0], '_id', 'Book should contain _id');
           _id1 = res.body._id;
+          assert.equal(res.body.title, 'Title 1');
           done();
         });
       });
       
       test('Test POST /api/books with no title given', function(done) {
-        //done();
+        chai.request(server)
+        .post('/api/books')
+        .send({})
+        .end(function(err, res){
+          assert.equal(res.status, 200);
+          assert.equal(res.text, 'missing inputs');
+          done();
+        });
       });
       
     });
