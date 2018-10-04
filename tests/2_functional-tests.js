@@ -161,14 +161,14 @@ suite('Functional Tests', function() {
       });
     });
     
-        suite('DELETE /api/books => delete all books', function() {
+    suite('DELETE /api/books/[id] => delete one book by id', function() {
       
-      test('Test DELETE /api/books', function(done) {
+      test('Test DELETE /api/books/[id]', function(done) {
         chai.request(server)
-        .delete('/api/books')
+        .delete(`/api/books/${_id1}`)
         .end(function(err, res){
           assert.equal(res.status, 200);
-          assert.equal(res.text, 'complete delete successful');
+          assert.equal(res.text, 'delete successful');
           done();
         });  
       });
