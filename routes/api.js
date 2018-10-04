@@ -29,7 +29,6 @@ module.exports = (app) => {
               commentcount: book.comments.length 
             }
           });
-          console.log(books);
           res.status(200).json(books);
       })
         .catch((err) => {
@@ -43,10 +42,10 @@ module.exports = (app) => {
       if (!title) { 
         return res.status(200).send('missing inputs');
       };
-      const book = new Book({ title });
-      Book.save()
+      const newBook = new Book({ title });
+      newBook.save()
         .then((book) => {
-          console.log(book);
+          if (!book) { console.log('error saving book'); }
           res.status(200).json({ title: book.title, _id: book._id });
         })
         .catch((err) => {
