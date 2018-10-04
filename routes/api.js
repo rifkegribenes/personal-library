@@ -22,9 +22,11 @@ module.exports = (app) => {
       Book.find()
         .then((bookDocs) => {
           const books = bookDocs.map((book) => {
-            _id: book._id,
-            title: book.title,
-            commentcount: book.comments.length 
+            return {
+              _id: book._id,
+              title: book.title,
+              commentcount: book.comments.length 
+            }
           });
           res.status(200).json(books);
       })
